@@ -88,7 +88,7 @@ class Food:
   def eaten(self, snake_body):
     temp_x = randint(0, (SCREEN_WIDTH-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
     temp_y = randint(0, (SCREEN_HEIGHT-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
-    temp_pos = (temp_x, temp_y)
+    temp_pos = [temp_x, temp_y]
 
     # Checking that new food is not in snake
     while temp_pos in snake_body:

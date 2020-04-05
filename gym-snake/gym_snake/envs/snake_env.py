@@ -26,7 +26,7 @@ class SnakeEnv(gym.Env):
   def step(self, action):
     if(self.done):
         print("Game over")
-        return [ self.snake.body, self.food.position, self.score, self.done]
+        return [ self.snake.body, self.snake.direction, self.food.position, self.score, self.done ]
 
     if(action == 0):
         self.snake.moveUp()
@@ -51,7 +51,7 @@ class SnakeEnv(gym.Env):
         self.done = True
 
     self.clock.tick(10)
-    return [ self.snake.body, self.food.position, self.score, self.done]
+    return [ self.snake.body, self.snake.direction, self.food.position, self.score, self.done]
 
   def reset(self):
     self.done = False
