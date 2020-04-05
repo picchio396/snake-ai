@@ -68,7 +68,7 @@ class Snake:
 
       self.score = self.score + 1
 
-    return (False, self.score)
+    return [False, self.score]
 
 class Food:
   def __init__(self):
