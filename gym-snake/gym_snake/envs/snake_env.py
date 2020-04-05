@@ -10,10 +10,13 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 MAX_SIZE = (SCREEN_HEIGHT/BLOCK_SIZE) * (SCREEN_WIDTH/BLOCK_SIZE)
 
-class FooEnv(gym.Env):
+class SnakeEnv(gym.Env):
   metadata = {'render.modes': ['human']}
 
   def __init__(self):
+    # gym variables
+    self.action_space = spaces.Discrete(4)
+
     # Initialize pygame
     pygame.init()
     self.screen = pygame.display.set_mode((SCREEN_WIDTH + 1, SCREEN_HEIGHT + 1))
@@ -48,7 +51,7 @@ class FooEnv(gym.Env):
         self.done = True
 
     self.clock.tick(10)
-    return [ self.snake.x, self.snake.y, self.food.x, self.food.y, self.score, self.done]
+    # return [ self.snake.x, self.snake.y, self.food.x, self.food.y, self.score, self.done]
 
   def reset(self):
     self.done = False
@@ -57,4 +60,10 @@ class FooEnv(gym.Env):
     self.food = Food()
 
   def render(self, mode='human', close=False):
-    ...
+    self.screen.fill((0,0,0))
+    self.snake.draw(self.screen)
+    self.food.draw(self.screen)
+    pygame.display.flip()
+
+  def close(self):
+    self.done = True
