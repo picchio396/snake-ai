@@ -56,7 +56,14 @@ class SnakeEnv(gym.Env):
       print('You won! No more space')
       self.done = True
 
-    lost, didEat = self.snake.collision(self.food)
+    ## FIX ME
+    #   Traceback (most recent call last):
+    # File "e:/VS_Projects/snakeAI/test-dumb.py", line 13, in <module>
+    #   state, reward, done = env.step(action)
+    # File "e:\vs_projects\snakeai\gym-snake\gym_snake\envs\snake_env.py", line 59, in step
+    #   lost, score = self.snake.collision(self.food)
+    # TypeError: cannot unpack non-iterable bool object
+    lost, score = self.snake.collision(self.food)
     self.score = score
     if (lost):
       print("You lost")
