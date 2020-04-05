@@ -26,7 +26,7 @@ class SnakeEnv(gym.Env):
   def step(self, action):
     if(self.done):
         print("Game over")
-        return [ self.snake.x, self.snake.y, self.food.x, self.food.y, self.score, self.done]
+        return [ self.snake.body, self.food.position, self.score, self.done]
 
     if(action == 0):
         self.snake.moveUp()
@@ -40,7 +40,7 @@ class SnakeEnv(gym.Env):
     self.render()
     self.snake.update()
 
-    if (len(self.snake.x) >= MAX_SIZE ):
+    if (len(self.snake.body) >= MAX_SIZE ):
         print('You won! No more space')
         self.done = True
 
@@ -51,7 +51,7 @@ class SnakeEnv(gym.Env):
         self.done = True
 
     self.clock.tick(10)
-    # return [ self.snake.x, self.snake.y, self.food.x, self.food.y, self.score, self.done]
+    return [ self.snake.body, self.food.position, self.score, self.done]
 
   def reset(self):
     self.done = False

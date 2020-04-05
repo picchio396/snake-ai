@@ -7,8 +7,7 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
 class Snake:
-  x = [400, 375, 350]
-  y = [300, 300, 300]
+  body = [[400,300], [375,300], [350, 300]]
   direction = [1,0]
   score = 0
 
@@ -19,8 +18,8 @@ class Snake:
     # self.rect = self.surf.get_rect()
 
   def draw(self, screen):
-    for i in range(len(self.x)):
-      screen.blit(self.surf, (self.x[i], self.y[i]))
+    for i in range(len(self.body)):
+      screen.blit(self.surf, (self.body[i][0], self.body[i][1]))
 
   def moveRight(self):
     if (self.direction != [-1, 0]):
@@ -37,37 +36,35 @@ class Snake:
     
   def update(self):
     # Move last element to head spot
-    self.x[-1] = self.x[0]
-    self.y[-1] = self.y[0]
-    self.x.insert(1, self.x.pop(-1))
-    self.y.insert(1, self.y.pop(-1))
+    self.body[-1] = self.body[0]
+    self.body.insert(1, self.body.pop(-1))
 
     # Move head
-    self.x[0] = self.x[0] + (self.direction[0] * BLOCK_SIZE)
-    self.y[0] = self.y[0] + (self.direction[1] * BLOCK_SIZE)
+    self.body[0] = [self.body[0][0] + (self.direction[0] * BLOCK_SIZE), self.body[0][1] + (self.direction[1] * BLOCK_SIZE)]
+    # self.x[0] = self.x[0] + (self.direction[0] * BLOCK_SIZE)
+    # self.y[0] = self.y[0] + (self.direction[1] * BLOCK_SIZE)
 
     # Keep snake on the screen
-    if self.x[0] < 0:
-      self.x[0] = SCREEN_WIDTH - BLOCK_SIZE
-    if self.x[0] >= SCREEN_WIDTH:
-      self.x[0] = 0
-    if self.y[0] < 0:
-      self.y[0] = SCREEN_HEIGHT - BLOCK_SIZE
-    if self.y[0] >= SCREEN_HEIGHT:
-      self.y[0] = 0
+    if self.body[0][0] < 0:
+      self.body[0][0] = SCREEN_WIDTH - BLOCK_SIZE
+    if self.body[0][0] >= SCREEN_WIDTH:
+      self.body[0][0] = 0
+    if self.body[0][1] < 0:
+      self.body[0][1] = SCREEN_HEIGHT - BLOCK_SIZE
+    if self.body[0][1] >= SCREEN_HEIGHT:
+      self.body[0][1] = 0
 
   def collision(self, food):
     # Check if collides with itself
-    for i in range(1, len(self.x)):
-      if(self.x[0] == self.x[i] and self.y[0] == self.y[i]):
+    for i in range(1, len(self.body)):
+      if(self.body[0] == self.body[i]):
         return True
 
     # Check if food was eaten
-    if(self.x[0] == food.x and self.y[0] == food.y):
+    if(self.body[0] == food.position):
       # Add snake length
-      self.x.append(food.x)
-      self.y.append(food.y)
-      food.eaten(self.x, self.y)
+      self.body.append(food.position)
+      food.eaten(self.body)
 
       self.score = self.score + 1
 
@@ -81,20 +78,22 @@ class Food:
     self.surf.fill((181, 53, 53))
     # self.rect = self.surf.get_rect()
 
-    self.x = randint(0, (SCREEN_WIDTH-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
-    self.y = randint(0, (SCREEN_HEIGHT-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
+    x = randint(0, (SCREEN_WIDTH-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
+    y = randint(0, (SCREEN_HEIGHT-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
+    self.position = [x, y]
 
   def draw(self, screen):
-    screen.blit(self.surf, (self.x, self.y))
-
-  def eaten(self, snake_x, snake_y):
+    screen.blit(self.surf, (self.position[0], self.position[1]))
+    
+  def eaten(self, snake_body):
     temp_x = randint(0, (SCREEN_WIDTH-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
     temp_y = randint(0, (SCREEN_HEIGHT-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
+    temp_pos = (temp_x, temp_y)
 
     # Checking that new food is not in snake
-    while (temp_x in snake_x) and (temp_y in snake_y):
+    while temp_pos in snake_body:
       temp_x = randint(0, (SCREEN_WIDTH-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
       temp_y = randint(0, (SCREEN_HEIGHT-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
+      temp_pos = [temp_x, temp_y]
 
-    self.x = temp_x
-    self.y = temp_y
+    self.position = temp_pos
