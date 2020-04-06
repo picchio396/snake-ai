@@ -3,7 +3,7 @@ import gym_snake
 
 env = gym.make('snake-v0')
 
-epochs = 0
+timestep = 0
 penalties, reward = 0, 0
 
 done = False
@@ -15,9 +15,8 @@ while not done:
     if reward == -10:
         penalties += 1
 
-
-    epochs += 1
+    timestep += 1
     
     
-print("Timesteps taken: {}".format(epochs))
+print("Timesteps taken: {}".format(timestep))
 print("Penalties incurred: {}".format(penalties))

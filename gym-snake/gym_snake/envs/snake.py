@@ -1,13 +1,10 @@
 #!/usr/bin/python3
 import pygame
 from random import randint
-
-BLOCK_SIZE = 25
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+import gym_snake.envs.constants as constants
 
 class Snake:
-  body = [[400,300], [375,300], [350, 300]]
+  body = [[16,12], [15,12], [14, 12]]
   direction = [1,0]
   score = 0
 
@@ -19,7 +16,7 @@ class Snake:
 
   def draw(self, screen):
     for i in range(len(self.body)):
-      screen.blit(self.surf, (self.body[i][0], self.body[i][1]))
+      screen.blit(self.surf, (self.body[i][0] * constants.BLOCK_SIZE, self.body[i][1] * constants.BLOCK_SIZE))
 
   def moveRight(self):
     if (self.direction != [-1, 0]):
@@ -40,25 +37,25 @@ class Snake:
     self.body.insert(1, self.body.pop(-1))
 
     # Move head
-    self.body[0] = [self.body[0][0] + (self.direction[0] * BLOCK_SIZE), self.body[0][1] + (self.direction[1] * BLOCK_SIZE)]
-    # self.x[0] = self.x[0] + (self.direction[0] * BLOCK_SIZE)
-    # self.y[0] = self.y[0] + (self.direction[1] * BLOCK_SIZE)
+    self.body[0] = [self.body[0][0] + (self.direction[0]), self.body[0][1] + (self.direction[1])]
+    # self.x[0] = self.x[0] + (self.direction[0])
+    # self.y[0] = self.y[0] + (self.direction[1])
 
     # Keep snake on the screen
     if self.body[0][0] < 0:
-      self.body[0][0] = SCREEN_WIDTH - BLOCK_SIZE
-    if self.body[0][0] >= SCREEN_WIDTH:
+      self.body[0][0] = int(constants.MAX_WIDTH - 1)
+    if self.body[0][0] >= constants.MAX_WIDTH:
       self.body[0][0] = 0
     if self.body[0][1] < 0:
-      self.body[0][1] = SCREEN_HEIGHT - BLOCK_SIZE
-    if self.body[0][1] >= SCREEN_HEIGHT:
+      self.body[0][1] = int(constants.MAX_HEIGHT - 1)
+    if self.body[0][1] >= constants.MAX_HEIGHT:
       self.body[0][1] = 0
 
   def collision(self, food):
     # Check if collides with itself
     for i in range(1, len(self.body)):
       if(self.body[0] == self.body[i]):
-        return True
+        return [True, -1]
 
     # Check if food was eaten
     if(self.body[0] == food.position):
@@ -67,8 +64,9 @@ class Snake:
       food.eaten(self.body)
 
       self.score = self.score + 1
+      return [False, 1]
 
-    return [False, self.score]
+    return [False, -0.1]
 
 class Food:
   def __init__(self):
@@ -78,22 +76,22 @@ class Food:
     self.surf.fill((181, 53, 53))
     # self.rect = self.surf.get_rect()
 
-    x = randint(0, (SCREEN_WIDTH-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
-    y = randint(0, (SCREEN_HEIGHT-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
+    x = randint(0, (constants.MAX_WIDTH - 1))
+    y = randint(0, (constants.MAX_HEIGHT -1))
     self.position = [x, y]
 
   def draw(self, screen):
-    screen.blit(self.surf, (self.position[0], self.position[1]))
+    screen.blit(self.surf, (self.position[0] * constants.BLOCK_SIZE , self.position[1] * constants.BLOCK_SIZE))
     
   def eaten(self, snake_body):
-    temp_x = randint(0, (SCREEN_WIDTH-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
-    temp_y = randint(0, (SCREEN_HEIGHT-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
+    temp_x = randint(0, (constants.MAX_WIDTH - 1))
+    temp_y = randint(0, (constants.MAX_HEIGHT -1))
     temp_pos = [temp_x, temp_y]
 
     # Checking that new food is not in snake
     while temp_pos in snake_body:
-      temp_x = randint(0, (SCREEN_WIDTH-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
-      temp_y = randint(0, (SCREEN_HEIGHT-BLOCK_SIZE)/BLOCK_SIZE) * BLOCK_SIZE
+      temp_x = randint(0, (constants.MAX_WIDTH - 1))
+      temp_y = randint(0, (constants.MAX_HEIGHT -1))
       temp_pos = [temp_x, temp_y]
 
     self.position = temp_pos

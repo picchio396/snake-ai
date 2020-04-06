@@ -1,6 +1,7 @@
 import gym
 from gym import error, spaces, utils
 from gym.utils import seeding
+import numpy as np
 
 from gym_snake.envs.snake import Snake, Food
 import pygame
@@ -9,11 +10,7 @@ from pygame.locals import (
   K_ESCAPE,
   QUIT
 )
-
-BLOCK_SIZE = 25
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-MAX_SIZE = (SCREEN_HEIGHT/BLOCK_SIZE) * (SCREEN_WIDTH/BLOCK_SIZE)
+import gym_snake.envs.constants as constants
 
 class SnakeEnv(gym.Env):
   metadata = {'render.modes': ['human']}
@@ -24,9 +21,9 @@ class SnakeEnv(gym.Env):
 
     # Initialize pygame
     pygame.init()
-    self.screen = pygame.display.set_mode((SCREEN_WIDTH + 1, SCREEN_HEIGHT + 1))
+    self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH + 1, constants.SCREEN_HEIGHT + 1))
     self.clock = pygame.time.Clock() 
-    self.reset()
+    self.state = self.reset()
 
   def step(self, action):
     for event in pygame.event.get():
@@ -38,7 +35,7 @@ class SnakeEnv(gym.Env):
     
     if(self.done):
         print("Game over")
-        return [ [self.snake.body, self.snake.direction, self.food.position], self.score, self.done ]
+        return [ [self.snake.body, self.snake.direction, self.food.position], self.reward, self.done ]
     
     if(action == 0):
         self.snake.moveUp()
@@ -52,33 +49,28 @@ class SnakeEnv(gym.Env):
     self.render()
     self.snake.update()
 
-    if (len(self.snake.body) >= MAX_SIZE ):
+    self.state = self.getState()
+
+    if (len(self.snake.body) >= constants.MAX_SIZE ):
       print('You won! No more space')
       self.done = True
 
-    ## FIX ME
-    #   Traceback (most recent call last):
-    # File "e:/VS_Projects/snakeAI/test-dumb.py", line 13, in <module>
-    #   state, reward, done = env.step(action)
-    # File "e:\vs_projects\snakeai\gym-snake\gym_snake\envs\snake_env.py", line 59, in step
-    #   lost, score = self.snake.collision(self.food)
-    # TypeError: cannot unpack non-iterable bool object
-    lost, score = self.snake.collision(self.food)
-    self.score = score
+    lost, reward = self.snake.collision(self.food)
+
     if (lost):
       print("You lost")
       self.done = True
 
     self.clock.tick(10)
-    return [ [self.snake.body, self.snake.direction, self.food.position], self.score, self.done ]
+    return [ self.state , reward, self.done ]
 
   def reset(self):
     self.done = False
-    self.score = 0
+    self.reward = 0.1
     self.snake = Snake()
     self.food = Food()
     
-    return [[self.snake.body, self.snake.direction, self.food.position], self.score, self.done ]
+    return self.getState()
 
   def render(self, mode='human', close=False):
     self.screen.fill((0,0,0))
@@ -88,3 +80,11 @@ class SnakeEnv(gym.Env):
 
   def close(self):
     self.done = True
+
+  # State is given by relative fruit position and relative tail position
+  def getState(self):
+    rel_food = [self.snake.body[0][0] - self.food.position[0], self.snake.body[0][1] - self.food.position[1]]
+    rel_tail = [self.snake.body[0][0] - self.snake.body[-1][0], self.snake.body[0][1] - self.snake.body[-1][1]]
+
+    return [rel_food[0],rel_food[1], rel_tail[0], rel_tail[1]]
+
