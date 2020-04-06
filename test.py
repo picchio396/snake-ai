@@ -15,6 +15,10 @@ import constants
 
 MAX_EPOCHS = 100
 
+## TODO
+# figure out how to stop
+# figure out how to save
+
 # q_table = np.zeros([])
 
 # All 0 < x < 1 
@@ -58,7 +62,7 @@ for i in range(1, MAX_EPOCHS):
 
         state = next_state
         epochs += 1
-        
+
     if i % 100 == 0:
         print(f"Episode: {i}")
 
