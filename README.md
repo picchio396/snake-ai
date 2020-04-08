@@ -20,5 +20,6 @@ For now, run test.py
 I ran the test more than 1000 and did not get a highscore greater than 3...
 I'm not sure if it is because my environment variables (alpha, gamma and epsilon) are wrong or if the whole flow is wrong.<br /><br />
 - I save the observation space as an array and store all possible values. I don't think this is a good approach because it generates a massive array and there is probably a better way to do it. 
+- Now that I think about, the whole reward system might be broken. Currently, the state is the relative tail position and the relative distance to the food and that is it (no knowledge of the board).
 
 
