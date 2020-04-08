@@ -13,27 +13,31 @@ import random
 import numpy as np
 import constants
 
-MAX_EPOCHS = 150
+MAX_EPOCHS = 200
 
 
 # All 0 < x < 1 
 # alpha: learning rate (the extent to which our Q-values are being updated in every iteration)
 # gamma: discount factor (how much importance we want to give to future rewards)
 # epsilon: exploration faction (exploration (choosing alpha random action) vs exploitation (choosing actions based on already learned Q-values))
-alpha = 0.5 #0.1
-gamma = 0.5#0.6
+alpha = 0.17#0.1
+gamma = 0.8#0.6
 epsilon =  0.2 #0.1
+
 # epsilon = 1
-# epsilon_rate = 0.99
-# min_epsilon = 0.3
+# epsilon_rate = 0.75
+# min_epsilon = 0.2
+gamma = 0.2
+gamma_rate = 0.99
+min_gamma = 0.3
 
 env = gym.make('snake-v0')
 
-# try:
-#     print('Loading...')
-#     q_table = np.load('q_table.npy')
-# except:
-#     print("Initializing...")
+try:
+    print('Loading...')
+    q_table = np.load('q_table.npy')
+except:
+    print("Initializing...")
 q_table = np.zeros([2048, 4])
 
 # For plotting metrics
@@ -45,7 +49,7 @@ max_score = 0
 for i in range(0, MAX_EPOCHS):
     state = env.reset()
 
-    epochs, penalties, reward, = 0, 0, 0
+    epochs, reward, = 0, 0
     done = False
     
     while not done:
@@ -63,9 +67,6 @@ for i in range(0, MAX_EPOCHS):
         new_value = (1 - alpha) * old_value + alpha * (reward + gamma * next_max)
         q_table[state][action] = new_value
 
-        if reward == -10:
-            penalties += 1
-
         state = next_state
         epochs += 1
 
@@ -79,8 +80,8 @@ for i in range(0, MAX_EPOCHS):
     if i % 100 == 0:
         print(f"Episode: {i}")
 
-# print('Saving...')
-# np.save('q_table.npy', q_table)
+print('Saving...')
+np.save('q_table.npy', q_table)
 
 print("Max score: " + str(max_score))
 print("Training finished.\n")

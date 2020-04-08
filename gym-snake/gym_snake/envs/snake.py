@@ -19,13 +19,17 @@ class Snake:
       screen.blit(self.surf, (self.body[i][0] * constants.BLOCK_SIZE, self.body[i][1] * constants.BLOCK_SIZE))
 
   def moveRight(self):
-    self.direction = [1, 0]
+    if(self.direction != [-1, 0]):
+      self.direction = [1, 0]
   def moveLeft(self):
-    self.direction = [-1, 0]
+    if(self.direction != [1, 0]):
+      self.direction = [-1, 0]
   def moveUp(self):
-    self.direction = [0, -1]
+    if(self.direction != [0, 1]):
+      self.direction = [0, -1]
   def moveDown(self):
-    self.direction = [0, 1]
+    if(self.direction != [0, -1]):
+      self.direction = [0, 1]
     
   def update(self):
     # Move last element to head spot
@@ -73,10 +77,12 @@ class Snake:
     # Check if collides with itself
     for i in range(1, len(self.body)):
       if(self.body[0] == self.body[i]):
+        print('me')
         return [True, -1]
 
     # Check if hits walls
     if self.body[0][0] < 0 or self.body[0][0] >= constants.MAX_WIDTH or self.body[0][1] < 0 or self.body[0][1] >= constants.MAX_HEIGHT:
+      print('wall')
       return [True, -1]
 
     # Check if food was eaten
@@ -88,7 +94,7 @@ class Snake:
       self.score = self.score + 1
       return [False, 1]
 
-    return [False, -0.1]
+    return [False, 0.1]
 
 class Food:
   def __init__(self):
