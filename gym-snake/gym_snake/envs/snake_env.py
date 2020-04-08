@@ -22,20 +22,18 @@ class SnakeEnv(gym.Env):
     # Initialize pygame
     pygame.init()
     self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH + 1, constants.SCREEN_HEIGHT + 1))
-    self.clock = pygame.time.Clock() 
+    # self.clock = pygame.time.Clock() 
     self.state = self.reset()
 
   def step(self, action):
+    state = self.getState()
+
     for event in pygame.event.get():
         if event.type == KEYDOWN:
           if event.key == K_ESCAPE:
             self.done = True
         elif event.type == QUIT:
             self.done = True
-    
-    if(self.done):
-        print("Game over")
-        return [ [self.snake.body, self.snake.direction, self.food.position], self.reward, self.done ]
     
     if(action == 0):
         self.snake.moveUp()
@@ -49,28 +47,28 @@ class SnakeEnv(gym.Env):
     self.render()
     self.snake.update()
 
-    self.state = self.getState()
-
     if (len(self.snake.body) >= constants.MAX_SIZE ):
-      print('You won! No more space')
+      # print('You won! No more space')
       self.done = True
 
     lost, reward = self.snake.collision(self.food)
 
     if (lost):
-      print("You lost")
+      # print("gg")
+      # print("Score: " + str(self.snake.score))
       self.done = True
 
-    self.clock.tick(10)
-    return [ self.state , reward, self.done ]
+    # self.clock.tick(10)
+    return [ state , reward, self.done, self.snake.score ]
 
   def reset(self):
     self.done = False
     self.reward = 0.1
     self.snake = Snake()
     self.food = Food()
+    state = self.getState()
     
-    return self.getState()
+    return state
 
   def render(self, mode='human', close=False):
     self.screen.fill((0,0,0))

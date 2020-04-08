@@ -13,7 +13,7 @@ import random
 import numpy as np
 import constants
 
-MAX_EPOCHS = 100
+MAX_EPOCHS = 5000
 
 ## TODO
 # figure out how to stop
@@ -25,19 +25,26 @@ MAX_EPOCHS = 100
 # alpha: learning rate (the extent to which our Q-values are being updated in every iteration)
 # gamma: discount factor (how much importance we want to give to future rewards)
 # epsilon: exploration faction (exploration (choosing alpha random action) vs exploitation (choosing actions based on already learned Q-values))
-alpha = 0.1
-gamma = 0.6
-epsilon = 0.1
+alpha = 0.1 #0.1
+gamma = 0.6 #0.6
+epsilon = 0.1 #0.1
 
 env = gym.make('snake-v0')
 
-q_table = np.zeros([int(constants.MAX_WIDTH), int(constants.SCREEN_HEIGHT), int(constants.MAX_WIDTH), int(constants.MAX_HEIGHT)])
+try:
+    print('Loading...')
+    q_table = np.load('q_table.npy')
+except:
+    print("Initializing...")
+    q_table = np.zeros([int(constants.MAX_WIDTH*2), int(constants.SCREEN_HEIGHT*2), int(constants.MAX_WIDTH*2), int(constants.MAX_HEIGHT*2), 4])
 
 # For plotting metrics
 all_epochs = []
 all_penalties = []
 
-for i in range(1, MAX_EPOCHS):
+max_score = 0
+
+for i in range(0, MAX_EPOCHS):
     state = env.reset()
 
     epochs, penalties, reward, = 0, 0, 0
@@ -47,15 +54,16 @@ for i in range(1, MAX_EPOCHS):
         if random.uniform(0, 1) < epsilon:
             action = env.action_space.sample() # Explore action space
         else:
-            action = np.argmax(q_table[state]) # Exploit learned values
+            action = np.argmax(q_table[state[0]][state[1]][state[2]][state[3]]) # Exploit learned values
 
-        next_state, reward, done = env.step(action) 
+        next_state, reward, done, score = env.step(action) 
+        # print( next_state, reward, done, score)
         
-        old_value = q_table[state][action]
-        next_max = np.max(q_table[next_state])
+        old_value = q_table[state[0]][state[1]][state[2]][state[3]][action]
+        next_max = np.max(q_table[next_state[0]][next_state[1]][next_state[2]][next_state[3]])
         
         new_value = (1 - alpha) * old_value + alpha * (reward + gamma * next_max)
-        q_table[state][action] = new_value
+        q_table[state[0]][state[1]][state[2]][state[3]][action] = new_value
 
         if reward == -10:
             penalties += 1
@@ -63,7 +71,15 @@ for i in range(1, MAX_EPOCHS):
         state = next_state
         epochs += 1
 
+    
+    if score > max_score:
+        max_score = score
+        print('New max score: ' + str(max_score))
     if i % 100 == 0:
         print(f"Episode: {i}")
 
+print('Saving...')
+np.save('q_table.npy', q_table)
+
+print("Max score: " + str(max_score))
 print("Training finished.\n")

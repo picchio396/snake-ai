@@ -3,16 +3,16 @@ import pygame
 from random import randint
 import gym_snake.envs.constants as constants
 
-class Snake:
-  body = [[16,12], [15,12], [14, 12]]
-  direction = [1,0]
-  score = 0
 
+class Snake:
   def __init__(self):
     super().__init__()
     self.surf = pygame.Surface((24, 24))
     self.surf.fill((53, 181, 87)) # Darker (34, 117, 56)
     # self.rect = self.surf.get_rect()
+    self.body =  [[16,12], [15,12], [14, 12]]
+    self.direction = [1,0]
+    self.score = 0
 
   def draw(self, screen):
     for i in range(len(self.body)):
@@ -42,20 +42,24 @@ class Snake:
     # self.y[0] = self.y[0] + (self.direction[1])
 
     # Keep snake on the screen
-    if self.body[0][0] < 0:
-      self.body[0][0] = int(constants.MAX_WIDTH - 1)
-    if self.body[0][0] >= constants.MAX_WIDTH:
-      self.body[0][0] = 0
-    if self.body[0][1] < 0:
-      self.body[0][1] = int(constants.MAX_HEIGHT - 1)
-    if self.body[0][1] >= constants.MAX_HEIGHT:
-      self.body[0][1] = 0
+    # if self.body[0][0] < 0:
+    #   self.body[0][0] = int(constants.MAX_WIDTH - 1)
+    # if self.body[0][0] >= constants.MAX_WIDTH:
+    #   self.body[0][0] = 0
+    # if self.body[0][1] < 0:
+    #   self.body[0][1] = int(constants.MAX_HEIGHT - 1)
+    # if self.body[0][1] >= constants.MAX_HEIGHT:
+    #   self.body[0][1] = 0
 
   def collision(self, food):
     # Check if collides with itself
     for i in range(1, len(self.body)):
       if(self.body[0] == self.body[i]):
         return [True, -1]
+
+    # Check if hits walls
+    if self.body[0][0] < 0 or self.body[0][0] >= constants.MAX_WIDTH or self.body[0][1] < 0 or self.body[0][1] >= constants.MAX_HEIGHT:
+      return [True, -1]
 
     # Check if food was eaten
     if(self.body[0] == food.position):
