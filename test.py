@@ -20,14 +20,12 @@ MAX_EPOCHS = 150
 # alpha: learning rate (the extent to which our Q-values are being updated in every iteration)
 # gamma: discount factor (how much importance we want to give to future rewards)
 # epsilon: exploration faction (exploration (choosing alpha random action) vs exploitation (choosing actions based on already learned Q-values))
-alpha = 0.01 #0.1
-gamma = 0.6 #0.6
-epsilon = 0.1
-
-# # epsilon = 0.1
-epsilon = 1
-epsilon_rate = 0.99
-min_epsilon = 0.3
+alpha = 0.5 #0.1
+gamma = 0.5#0.6
+epsilon =  0.2 #0.1
+# epsilon = 1
+# epsilon_rate = 0.99
+# min_epsilon = 0.3
 
 env = gym.make('snake-v0')
 
@@ -36,7 +34,7 @@ env = gym.make('snake-v0')
 #     q_table = np.load('q_table.npy')
 # except:
 #     print("Initializing...")
-q_table = np.zeros([int(constants.MAX_WIDTH*2), int(constants.SCREEN_HEIGHT*2), int(constants.MAX_WIDTH*2), int(constants.MAX_HEIGHT*2), 4])
+q_table = np.zeros([2048, 4])
 
 # For plotting metrics
 all_epochs = []
@@ -54,16 +52,16 @@ for i in range(0, MAX_EPOCHS):
         if random.uniform(0, 1) < epsilon:
             action = env.action_space.sample() # Explore action space
         else:
-            action = np.argmax(q_table[state[0]][state[1]][state[2]][state[3]]) # Exploit learned values
+            action = np.argmax(q_table[state]) # Exploit learned values
 
         next_state, reward, done, score = env.step(action) 
         # print( next_state, reward, done, score)
         
-        old_value = q_table[state[0]][state[1]][state[2]][state[3]][action]
-        next_max = np.max(q_table[next_state[0]][next_state[1]][next_state[2]][next_state[3]])
+        old_value = q_table[state][action]
+        next_max = np.max(q_table[next_state])
         
         new_value = (1 - alpha) * old_value + alpha * (reward + gamma * next_max)
-        q_table[state[0]][state[1]][state[2]][state[3]][action] = new_value
+        q_table[state][action] = new_value
 
         if reward == -10:
             penalties += 1
@@ -72,7 +70,7 @@ for i in range(0, MAX_EPOCHS):
         epochs += 1
 
         # Updating epsilon value
-        epsilon = epsilon * epsilon_rate if epsilon > min_epsilon else min_epsilon
+        # epsilon = epsilon * epsilon_rate if epsilon > min_epsilon else min_epsilon
 
     
     if score > max_score:

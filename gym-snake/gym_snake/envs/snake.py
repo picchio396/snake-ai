@@ -19,17 +19,13 @@ class Snake:
       screen.blit(self.surf, (self.body[i][0] * constants.BLOCK_SIZE, self.body[i][1] * constants.BLOCK_SIZE))
 
   def moveRight(self):
-    if (self.direction != [-1, 0]):
-      self.direction = [1, 0]
+    self.direction = [1, 0]
   def moveLeft(self):
-    if (self.direction != [1, 0]):
-      self.direction = [-1, 0]
+    self.direction = [-1, 0]
   def moveUp(self):
-    if (self.direction != [0, 1]):
-      self.direction = [0, -1]
+    self.direction = [0, -1]
   def moveDown(self):
-    if (self.direction != [0, -1]):
-      self.direction = [0, 1]
+    self.direction = [0, 1]
     
   def update(self):
     # Move last element to head spot
@@ -37,7 +33,7 @@ class Snake:
     self.body.insert(1, self.body.pop(-1))
 
     # Move head
-    self.body[0] = [self.body[0][0] + (self.direction[0]), self.body[0][1] + (self.direction[1])]
+    self.body[0] = [self.body[0][0] + self.direction[0], self.body[0][1] + self.direction[1]]
     # self.x[0] = self.x[0] + (self.direction[0])
     # self.y[0] = self.y[0] + (self.direction[1])
 
@@ -50,6 +46,28 @@ class Snake:
     #   self.body[0][1] = int(constants.MAX_HEIGHT - 1)
     # if self.body[0][1] >= constants.MAX_HEIGHT:
     #   self.body[0][1] = 0
+
+  def danger (self, look):  
+    next_block = self.body[0]
+
+    if look == 'front':
+      next_block = [next_block[0] + self.direction[0], next_block[1] + self.direction[1]]
+    if look == 'left':
+      next_block = [next_block[0] - 1, next_block[1]]
+    if look == 'right':
+      next_block = [next_block[0] + 1, next_block[1]]
+
+    # Check if collides with itself
+    for i in range(1, len(self.body)):
+      if(next_block == self.body[i]):
+        return True
+
+    # Check if hits walls
+    if next_block[0] < 0 or next_block[0] >= constants.MAX_WIDTH or next_block[1] < 0 or next_block[1] >= constants.MAX_HEIGHT:
+      return True
+
+    return False
+
 
   def collision(self, food):
     # Check if collides with itself

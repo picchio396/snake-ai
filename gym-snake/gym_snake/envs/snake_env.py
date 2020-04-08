@@ -23,7 +23,20 @@ class SnakeEnv(gym.Env):
     pygame.init()
     self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH + 1, constants.SCREEN_HEIGHT + 1))
     # self.clock = pygame.time.Clock() 
+
+    self.isSnakeRight = False
+    self.isSnakeLeft = False
+    self.isSnakeUp = False
+    self.isSnakeDown = False
+
+    self.isSnakeRight = False
+    self.isSnakeLeft = False
+    self.isSnakeUp = False
+    self.isSnakeDown = False
+    self.isDanger = False
+
     self.state = self.reset()
+
 
   def step(self, action):
     state = self.getState()
@@ -81,8 +94,52 @@ class SnakeEnv(gym.Env):
 
   # State is given by relative fruit position and relative tail position
   def getState(self):
-    rel_food = [self.snake.body[0][0] - self.food.position[0], self.snake.body[0][1] - self.food.position[1]]
-    rel_tail = [self.snake.body[0][0] - self.snake.body[-1][0], self.snake.body[0][1] - self.snake.body[-1][1]]
+    # Reset
+    self.isSnakeRight = False
+    self.isSnakeLeft = False
+    self.isSnakeUp = False
+    self.isSnakeDown = False
 
-    return [rel_food[0],rel_food[1], rel_tail[0], rel_tail[1]]
+    self.isFoodRight = False
+    self.isFoodLeft = False
+    self.isFoodUp = False
+    self.isFoodDown = False
 
+    self.isDangerFront = False
+    self.isDangerLeft = False
+    self.isDangerRight = False
+
+    # rel_food = [self.snake.body[0][0] - self.food.position[0], self.snake.body[0][1] - self.food.position[1]]
+    # rel_tail = [self.snake.body[0][0] - self.snake.body[-1][0], self.snake.body[0][1] - self.snake.body[-1][1]]
+
+    if self.snake.direction == [1, 0]:
+      self.isSnakeRight =  True
+    if self.snake.direction == [-1, 0]:
+      self.isSnakeLeft = True
+    if self.snake.direction == [0,-1]:
+      self.isSnakeUp = True
+    if self.snake.direction == [0,1]:
+      self.isSnakeDown = True
+
+    # Food Right or left
+    if self.snake.body[0][0] - self.food.position[0] > 0:
+      self.isFoodLeft = True
+    else:
+      self.isFoodRight = True
+
+    # Food Up Down
+    if self.snake.body[0][1] - self.food.position[1] > 0:
+      self.isFoodUp = True
+    else:
+      self.isFoodDown = True
+
+    self.isDangerFront = self.snake.danger('front')
+    self.isDangerLeft = self.snake.danger('left')
+    self.isDangerRight = self.snake.danger('rights')
+
+
+    bin_string = str(int(self.isSnakeRight == True)) + str(int(self.isSnakeLeft == True)) + str(int(self.isSnakeUp == True)) + str(int(self.isSnakeDown == True)) + str(int(self.isFoodRight == True)) + str(int(self.isFoodLeft == True)) + str(int(self.isFoodUp == True)) + str(int(self.isFoodDown == True)) + str(int(self.isDangerFront == True)) + str(int(self.isDangerLeft == True)) + str(int(self.isDangerRight == True))
+
+    print(int(bin_string, 2))
+
+    return int(bin_string, 2) 
