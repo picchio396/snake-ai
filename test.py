@@ -21,15 +21,16 @@ MAX_EPOCHS = 200
 # gamma: discount factor (how much importance we want to give to future rewards)
 # epsilon: exploration faction (exploration (choosing alpha random action) vs exploitation (choosing actions based on already learned Q-values))
 alpha = 0.17#0.1
-gamma = 0.8#0.6
+gamma = 0.65#0.6
 epsilon =  0.2 #0.1
 
 # epsilon = 1
-# epsilon_rate = 0.75
-# min_epsilon = 0.2
-gamma = 0.2
-gamma_rate = 0.99
-min_gamma = 0.3
+# epsilon_rate = 0.8
+# min_epsilon = 0.1
+
+# gamma = 0.2
+# gamma_rate = 0.99
+# min_gamma = 0.3
 
 env = gym.make('snake-v0')
 
@@ -38,7 +39,7 @@ try:
     q_table = np.load('q_table.npy')
 except:
     print("Initializing...")
-q_table = np.zeros([2048, 4])
+q_table = np.zeros([2048, 3])
 
 # For plotting metrics
 all_epochs = []

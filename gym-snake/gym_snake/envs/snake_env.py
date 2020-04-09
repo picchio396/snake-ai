@@ -17,12 +17,12 @@ class SnakeEnv(gym.Env):
 
   def __init__(self):
     # gym variables
-    self.action_space = spaces.Discrete(4)
+    self.action_space = spaces.Discrete(3)
 
     # Initialize pygame
     pygame.init()
     self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH + 1, constants.SCREEN_HEIGHT + 1))
-    # self.clock = pygame.time.Clock() 
+    self.clock = pygame.time.Clock() 
 
     self.isSnakeRight = False
     self.isSnakeLeft = False
@@ -48,14 +48,13 @@ class SnakeEnv(gym.Env):
         elif event.type == QUIT:
             self.done = True
     
-    if(action == 0):
-        self.snake.moveUp()
-    elif(action == 1):
-        self.snake.moveDown()
+    # Go straigth (do nothing)
+    # if(action == 0):
+    #     self.snake.moveUp()
+    if(action == 1):
+        self.snake.turnRight()
     elif(action == 2):
-        self.snake.moveLeft()
-    elif(action == 3):
-        self.snake.moveRight()
+        self.snake.turnLeft()
 
     self.render()
     self.snake.update()
@@ -71,12 +70,12 @@ class SnakeEnv(gym.Env):
       # print("Score: " + str(self.snake.score))
       self.done = True
 
-    # self.clock.tick(10)
+    self.clock.tick(60)
     return [ state , reward, self.done, self.snake.score ]
 
   def reset(self):
     self.done = False
-    self.reward = 0.1
+    self.reward = -0.1
     self.snake = Snake()
     self.food = Food()
     state = self.getState()
