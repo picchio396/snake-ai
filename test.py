@@ -7,14 +7,14 @@
     Set the next state as the current state.
     If goal state is reached, then end and repeat the process.
 '''
-import gym 
-import gym_snake
 import random
 import numpy as np
 import constants
+import controller.snake_env as controller
 
 MAX_EPOCHS = 200
 
+env = controller.SnakeEnv()
 
 # All 0 < x < 1 
 # alpha: learning rate (the extent to which our Q-values are being updated in every iteration)
@@ -32,13 +32,11 @@ epsilon =  0.2 #0.1
 # gamma_rate = 0.99
 # min_gamma = 0.3
 
-env = gym.make('snake-v0')
-
-try:
-    print('Loading...')
-    q_table = np.load('q_table.npy')
-except:
-    print("Initializing...")
+# try:
+#     print('Loading...')
+#     q_table = np.load('q_table.npy')
+# except:
+print("Initializing...")
 q_table = np.zeros([2048, 3])
 
 # For plotting metrics
@@ -55,7 +53,7 @@ for i in range(0, MAX_EPOCHS):
     
     while not done:
         if random.uniform(0, 1) < epsilon:
-            action = env.action_space.sample() # Explore action space
+            action = random.randint(0,2) # Explore action space
         else:
             action = np.argmax(q_table[state]) # Exploit learned values
 
@@ -81,8 +79,8 @@ for i in range(0, MAX_EPOCHS):
     if i % 100 == 0:
         print(f"Episode: {i}")
 
-print('Saving...')
-np.save('q_table.npy', q_table)
+# print('Saving...')
+# np.save('q_table.npy', q_table)
 
 print("Max score: " + str(max_score))
 print("Training finished.\n")

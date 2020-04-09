@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 import pygame
 from random import randint
-import gym_snake.envs.constants as constants
-
+import constants
 
 class Snake:
   def __init__(self):

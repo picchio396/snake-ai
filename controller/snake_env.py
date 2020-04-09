@@ -1,24 +1,17 @@
-import gym
-from gym import error, spaces, utils
-from gym.utils import seeding
 import numpy as np
-
-from gym_snake.envs.snake import Snake, Food
 import pygame
 from pygame.locals import (
   KEYDOWN,
   K_ESCAPE,
   QUIT
 )
-import gym_snake.envs.constants as constants
 
-class SnakeEnv(gym.Env):
-  metadata = {'render.modes': ['human']}
+from controller.snake import Snake, Food
+import constants as constants
+
+class SnakeEnv():
 
   def __init__(self):
-    # gym variables
-    self.action_space = spaces.Discrete(3)
-
     # Initialize pygame
     pygame.init()
     self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH + 1, constants.SCREEN_HEIGHT + 1))
@@ -36,7 +29,6 @@ class SnakeEnv(gym.Env):
     self.isDanger = False
 
     self.state = self.reset()
-
 
   def step(self, action):
     state = self.getState()
@@ -82,7 +74,7 @@ class SnakeEnv(gym.Env):
     
     return state
 
-  def render(self, mode='human', close=False):
+  def render(self):
     self.screen.fill((0,0,0))
     self.snake.draw(self.screen)
     self.food.draw(self.screen)
