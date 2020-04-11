@@ -17,33 +17,46 @@ class Snake:
     for i in range(len(self.body)):
       screen.blit(self.surf, (self.body[i][0] * constants.BLOCK_SIZE, self.body[i][1] * constants.BLOCK_SIZE))
 
-  def turnLeft(self):
-    # going right -> move up
-    if(self.direction == [1,0]):
-      self.direction = [0, -1]
-    # going left -> move down
-    elif(self.direction == [-1,0]):
-      self.direction = [0, 1]
-    # going up -> move left
-    elif(self.direction == [0,-1]):
-      self.direction = [-1, 0]
-    # going down -> move right
-    elif(self.direction == [0,-1]):
+  def moveRight(self):
+    if(self.direction != [-1, 0]):
       self.direction = [1, 0]
+  def moveLeft(self):
+    if(self.direction != [1, 0]):
+      self.direction = [-1, 0]
+  def moveUp(self):
+    if(self.direction != [0, 1]):
+      self.direction = [0, -1]
+  def moveDown(self):
+    if(self.direction != [0, -1]):
+      self.direction = [0, 1]
 
-  def turnRight(self):
-    # going right -> move down
-    if(self.direction == [1,0]):
-      self.direction = [0, 1]
-    # going left -> move up
-    elif(self.direction == [-1,0]):
-      self.direction = [0, -1]
-    # going up -> move rigth
-    elif(self.direction == [0,-1]):
-      self.direction = [1, 0]
-    # going down -> move left
-    elif(self.direction == [0,-1]):
-      self.direction = [-1, 0]
+  # def turnLeft(self):
+  #   # going right -> move up
+  #   if(self.direction == [1,0]):
+  #     self.direction = [0, -1]
+  #   # going left -> move down
+  #   elif(self.direction == [-1,0]):
+  #     self.direction = [0, 1]
+  #   # going up -> move left
+  #   elif(self.direction == [0,-1]):
+  #     self.direction = [-1, 0]
+  #   # going down -> move right
+  #   elif(self.direction == [0,-1]):
+  #     self.direction = [1, 0]
+
+  # def turnRight(self):
+  #   # going right -> move down
+  #   if(self.direction == [1,0]):
+  #     self.direction = [0, 1]
+  #   # going left -> move up
+  #   elif(self.direction == [-1,0]):
+  #     self.direction = [0, -1]
+  #   # going up -> move rigth
+  #   elif(self.direction == [0,-1]):
+  #     self.direction = [1, 0]
+  #   # going down -> move left
+  #   elif(self.direction == [0,-1]):
+  #     self.direction = [-1, 0]
     
   def update(self):
     # Move last element to head spot

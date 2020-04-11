@@ -23,14 +23,14 @@ env = controller.SnakeEnv()
 # gamma: discount factor (how much importance we want to give to future rewards)
 # epsilon: exploration faction (exploration (choosing alpha random action) vs exploitation (choosing actions based on already learned Q-values))
 alpha = 0.3 #0.1
-gamma = 0.75 #0.6
-epsilon =  0.7 #0.1
+gamma = 0.6 #0.6
+epsilon =  0.2 #0.1
 
 # alpha_rate = 0.9
 # min_alpha = 0.1
 
-epsilon_rate = 0.99
-min_epsilon = 0.1
+# epsilon_rate = 0.99
+# min_epsilon = 0.1
 
 # gamma_rate = 0.99
 # min_gamma = 0.3
@@ -40,7 +40,7 @@ min_epsilon = 0.1
 #     q_table = np.load('q_table.npy')
 # except:
 print("Initializing...")
-q_table = np.zeros([2048, 3])
+q_table = np.zeros([2048, 4])
 
 # For plotting metrics
 all_epochs = []
@@ -56,7 +56,7 @@ for i in range(0, MAX_EPOCHS):
     
     while not done:
         if random.uniform(0, 1) < epsilon:
-            action = random.randint(0,2) # Explore action space
+            action = random.randint(0,3) # Explore action space
         else:
             action = np.argmax(q_table[state]) # Exploit learned values
 
@@ -73,8 +73,8 @@ for i in range(0, MAX_EPOCHS):
         state = next_state
         epochs += 1
 
-        # Updating epsilon value
-        epsilon = epsilon * epsilon_rate if epsilon > min_epsilon else min_epsilon
+        # # Updating values
+        # epsilon = epsilon * epsilon_rate if epsilon > min_epsilon else min_epsilon
         # alpha = alpha * alpha_rate if alpha > min_alpha else min_alpha
 
     
