@@ -70,10 +70,34 @@ class Snake:
 
     if look == 'front':
       next_block = [next_block[0] + self.direction[0], next_block[1] + self.direction[1]]
+
     if look == 'left':
-      next_block = [next_block[0] - 1, next_block[1]]
+        # going right -> check up
+      if(self.direction == [1,0]):
+        next_block = [next_block[0], next_block[1] - 1]
+      # going left -> check down
+      elif(self.direction == [-1,0]):
+        next_block = [next_block[0], next_block[1] + 1]
+      # going up -> check left
+      elif(self.direction == [0,-1]):
+        next_block = [next_block[0] - 1, next_block[1]]
+      # going down -> check right
+      elif(self.direction == [0,-1]):
+        next_block = [next_block[0] + 1, next_block[1]]
+
     if look == 'right':
-      next_block = [next_block[0] + 1, next_block[1]]
+      # going right -> check down
+      if(self.direction == [1,0]):
+        next_block = [next_block[0], next_block[1] + 1]
+      # going left -> check up
+      elif(self.direction == [-1,0]):
+        next_block = [next_block[0], next_block[1] - 1]
+      # going up -> check rigth
+      elif(self.direction == [0,-1]):
+        next_block = [next_block[0] + 1, next_block[1]]
+      # going down -> check left
+      elif(self.direction == [0,-1]):
+        next_block = [next_block[0] - 1, next_block[1]]
 
     # Check if collides with itself
     for i in range(1, len(self.body)):
@@ -106,7 +130,7 @@ class Snake:
       food.eaten(self.body)
 
       self.score = self.score + 1
-      return [False, 1]
+      return [False, 5]
 
     return [False, -0.1]
 

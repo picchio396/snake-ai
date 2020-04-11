@@ -50,6 +50,7 @@ class SnakeEnv():
 
     self.render()
     self.snake.update()
+    # input('\n')
 
     if (len(self.snake.body) >= constants.MAX_SIZE ):
       # print('You won! No more space')
@@ -103,32 +104,87 @@ class SnakeEnv():
     # rel_food = [self.snake.body[0][0] - self.food.position[0], self.snake.body[0][1] - self.food.position[1]]
     # rel_tail = [self.snake.body[0][0] - self.snake.body[-1][0], self.snake.body[0][1] - self.snake.body[-1][1]]
 
+    # going rigth
     if self.snake.direction == [1, 0]:
       self.isSnakeRight =  True
+      # food left or right
+      if self.snake.body[0][1] - self.food.position[1] > 0:
+        self.isFoodLeft = True
+      elif self.snake.body[0][1] - self.food.position[1] < 0:
+        self.isFoodRight = True
+      #food up or down
+      if self.snake.body[0][0] - self.food.position[0] > 0:
+        self.isFoodDown = True
+      elif self.snake.body[0][0] - self.food.position[0] < 0:
+        self.isFoodUp = True
+
+    # going left
     if self.snake.direction == [-1, 0]:
       self.isSnakeLeft = True
+      # food left or right
+      if self.snake.body[0][1] - self.food.position[1] < 0:
+        self.isFoodLeft = True
+      elif self.snake.body[0][1] - self.food.position[1] > 0:
+        self.isFoodRight = True
+      #food up or down
+      if self.snake.body[0][0] - self.food.position[0] < 0:
+        self.isFoodDown = True
+      elif self.snake.body[0][0] - self.food.position[0] > 0:
+        self.isFoodUp = True
+
+    # going up
     if self.snake.direction == [0,-1]:
       self.isSnakeUp = True
+      # food left or right
+      if self.snake.body[0][0] - self.food.position[0] > 0:
+        self.isFoodLeft = True
+      elif self.snake.body[0][0] - self.food.position[0] < 0:
+        self.isFoodRight = True
+      #food up or down
+      if self.snake.body[0][1] - self.food.position[1] < 0:
+        self.isFoodDown = True
+      elif self.snake.body[0][1] - self.food.position[1] > 0:
+        self.isFoodUp = True
+
+    # going down
     if self.snake.direction == [0,1]:
       self.isSnakeDown = True
+      # food left or right
+      if self.snake.body[0][0] - self.food.position[0] < 0:
+        self.isFoodLeft = True
+      elif self.snake.body[0][0] - self.food.position[0] > 0:
+        self.isFoodRight = True
+      #food up or down
+      if self.snake.body[0][1] - self.food.position[1] > 0:
+        self.isFoodDown = True
+      elif self.snake.body[0][1] - self.food.position[1] < 0:
+        self.isFoodUp = True
 
-    # Food Right or left
-    if self.snake.body[0][0] - self.food.position[0] > 0:
-      self.isFoodLeft = True
-    else:
-      self.isFoodRight = True
-
-    # Food Up Down
-    if self.snake.body[0][1] - self.food.position[1] > 0:
-      self.isFoodUp = True
-    else:
-      self.isFoodDown = True
 
     self.isDangerFront = self.snake.danger('front')
     self.isDangerLeft = self.snake.danger('left')
     self.isDangerRight = self.snake.danger('rights')
 
+    # self.printState()
 
     bin_string = str(int(self.isSnakeRight == True)) + str(int(self.isSnakeLeft == True)) + str(int(self.isSnakeUp == True)) + str(int(self.isSnakeDown == True)) + str(int(self.isFoodRight == True)) + str(int(self.isFoodLeft == True)) + str(int(self.isFoodUp == True)) + str(int(self.isFoodDown == True)) + str(int(self.isDangerFront == True)) + str(int(self.isDangerLeft == True)) + str(int(self.isDangerRight == True))
 
     return int(bin_string, 2) 
+
+  def printState(self):
+    print("\
+      isSnakeRight: {0}\n\
+      isSnakeLeft: {1}\n\
+      isSnakeUp: {2}\n\
+      isSnakeDown: {3}\n\n\
+      isFoodRight: {4}\n\
+      isFoodLeft: {5}\n\
+      isFoodUp: {6}\n\
+      isFoodDown: {7}\n\n\
+      isDangerFront: {8}\n\
+      isDangerLeft:{9}\n\
+      isDangerRight: {10}\n\n\
+    ".format(self.isSnakeRight, self.isSnakeLeft, self.isSnakeUp, self.isSnakeDown, self.isFoodRight, self.isFoodLeft, self.isFoodUp, self.isFoodDown, self.isDangerFront, self.isDangerLeft, self.isDangerRight),
+      end="\r"
+    )
+
