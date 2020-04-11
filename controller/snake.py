@@ -143,7 +143,7 @@ class Snake:
       food.eaten(self.body)
 
       self.score = self.score + 1
-      return [False, 5]
+      return [False, 1]
 
     return [False, -0.1]
 

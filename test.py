@@ -14,7 +14,7 @@ import numpy as np
 import constants
 import controller.snake_env as controller
 
-MAX_EPOCHS = 150
+MAX_EPOCHS = 10
 
 env = controller.SnakeEnv()
 
@@ -24,12 +24,12 @@ env = controller.SnakeEnv()
 # epsilon: exploration faction (exploration (choosing alpha random action) vs exploitation (choosing actions based on already learned Q-values))
 alpha = 0.3 #0.1
 gamma = 0.6 #0.6
-epsilon =  0.2 #0.1
+epsilon =  0.1 #0.1
 
 # alpha_rate = 0.9
 # min_alpha = 0.1
 
-# epsilon_rate = 0.99
+# epsilon_rate = 0.95
 # min_epsilon = 0.1
 
 # gamma_rate = 0.99
@@ -66,8 +66,7 @@ for i in range(0, MAX_EPOCHS):
         old_value = q_table[state][action]
         next_max = np.max(q_table[next_state])
         
-        new_value = old_value + alpha * (reward + gamma * next_max * (1 - done) - old_value)
-        # new_value = (1 - alpha) * old_value + alpha * (reward + gamma * next_max)
+        new_value = (1 - alpha) * old_value + alpha * (reward + gamma * next_max)
         q_table[state][action] = new_value
 
         state = next_state
