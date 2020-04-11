@@ -58,11 +58,8 @@ class Snake:
     # Move last element to head spot
     self.body[-1] = self.body[0]
     self.body.insert(1, self.body.pop(-1))
-
     # Move head
     self.body[0] = [self.body[0][0] + self.direction[0], self.body[0][1] + self.direction[1]]
-    # self.x[0] = self.x[0] + (self.direction[0])
-    # self.y[0] = self.y[0] + (self.direction[1])
 
     # Keep snake on the screen
     # if self.body[0][0] < 0:
@@ -79,34 +76,10 @@ class Snake:
 
     if look == 'front':
       next_block = [next_block[0] + self.direction[0], next_block[1] + self.direction[1]]
-
     if look == 'left':
-        # going right -> check up
-      if(self.direction == [1,0]):
-        next_block = [next_block[0], next_block[1] - 1]
-      # going left -> check down
-      elif(self.direction == [-1,0]):
-        next_block = [next_block[0], next_block[1] + 1]
-      # going up -> check left
-      elif(self.direction == [0,-1]):
-        next_block = [next_block[0] - 1, next_block[1]]
-      # going down -> check right
-      elif(self.direction == [0,-1]):
-        next_block = [next_block[0] + 1, next_block[1]]
-
+      next_block = [next_block[0] - 1, next_block[1]]
     if look == 'right':
-      # going right -> check down
-      if(self.direction == [1,0]):
-        next_block = [next_block[0], next_block[1] + 1]
-      # going left -> check up
-      elif(self.direction == [-1,0]):
-        next_block = [next_block[0], next_block[1] - 1]
-      # going up -> check rigth
-      elif(self.direction == [0,-1]):
-        next_block = [next_block[0] + 1, next_block[1]]
-      # going down -> check left
-      elif(self.direction == [0,-1]):
-        next_block = [next_block[0] - 1, next_block[1]]
+      next_block = [next_block[0] + 1, next_block[1]]
 
     # Check if collides with itself
     for i in range(1, len(self.body)):
@@ -139,7 +112,7 @@ class Snake:
       food.eaten(self.body)
 
       self.score = self.score + 1
-      return [False, 5]
+      return [False, 1]
 
     return [False, -0.1]
 

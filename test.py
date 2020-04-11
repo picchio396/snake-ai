@@ -1,5 +1,3 @@
-# https://lilianweng.github.io/lil-log/2018/05/05/implementing-deep-reinforcement-learning-models.html
-# https://github.com/lilianweng/deep-reinforcement-learning-gym/blob/master/playground/policies/qlearning.py
 '''
     Initialize the Q-table by all zeros.
     Start exploring actions: For each state, select any one among all possible actions for the current state (S).
@@ -14,7 +12,7 @@ import numpy as np
 import constants
 import controller.snake_env as controller
 
-MAX_EPOCHS = 150
+MAX_EPOCHS = 200
 
 env = controller.SnakeEnv()
 
@@ -22,14 +20,17 @@ env = controller.SnakeEnv()
 # alpha: learning rate (the extent to which our Q-values are being updated in every iteration)
 # gamma: discount factor (how much importance we want to give to future rewards)
 # epsilon: exploration faction (exploration (choosing alpha random action) vs exploitation (choosing actions based on already learned Q-values))
-alpha = 0.5 #0.1
-gamma = 0.5#0.6
+alpha = 0.17#0.1
+gamma = 0.65#0.6
 epsilon =  0.2 #0.1
-# epsilon = 1
-# epsilon_rate = 0.99
-# min_epsilon = 0.3
 
-env = gym.make('snake-v0')
+# epsilon = 1
+# epsilon_rate = 0.8
+# min_epsilon = 0.1
+
+# gamma = 0.2
+# gamma_rate = 0.99
+# min_gamma = 0.3
 
 # try:
 #     print('Loading...')
@@ -62,8 +63,7 @@ for i in range(0, MAX_EPOCHS):
         old_value = q_table[state][action]
         next_max = np.max(q_table[next_state])
         
-        new_value = old_value + alpha * (reward + gamma * next_max * (1 - done) - old_value)
-        # new_value = (1 - alpha) * old_value + alpha * (reward + gamma * next_max)
+        new_value = (1 - alpha) * old_value + alpha * (reward + gamma * next_max)
         q_table[state][action] = new_value
 
         if reward == -10:
@@ -73,8 +73,7 @@ for i in range(0, MAX_EPOCHS):
         epochs += 1
 
         # Updating epsilon value
-        epsilon = epsilon * epsilon_rate if epsilon > min_epsilon else min_epsilon
-        # alpha = alpha * alpha_rate if alpha > min_alpha else min_alpha
+        # epsilon = epsilon * epsilon_rate if epsilon > min_epsilon else min_epsilon
 
     
     if score > max_score:
