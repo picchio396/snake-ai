@@ -7,7 +7,7 @@ QUIT
 )
 
 from controller.snake import Snake, Food
-import constants as constants
+import constants
 
 class SnakeEnv():
 
@@ -31,8 +31,6 @@ class SnakeEnv():
 		self.state = self.reset()
 
 	def step(self, action):
-		state = self.getState()
-
 		for event in pygame.event.get():
 			if event.type == KEYDOWN:
 				if event.key == K_ESCAPE:
@@ -52,10 +50,7 @@ class SnakeEnv():
 		self.render()
 		self.snake.update()
 		# input('\n')
-
-		if (len(self.snake.body) >= constants.MAX_SIZE ):
-			# print('You won! No more space')
-			self.done = True
+		state = self.getState()
 
 		lost, reward = self.snake.collision(self.food)
 
@@ -64,12 +59,12 @@ class SnakeEnv():
 			# print("Score: " + str(self.snake.score))
 			self.done = True
 
-		self.clock.tick(60)
+		self.clock.tick(constants.CLOCK)
 		return [ state , reward, self.done, self.snake.score ]
 
 	def reset(self):
 		self.done = False
-		self.reward = -0.1
+		self.reward = constants.REWARD_NULL
 		self.snake = Snake()
 		self.food = Food()
 		state = self.getState()

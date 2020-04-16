@@ -9,7 +9,8 @@ class Snake:
     self.surf = pygame.Surface((24, 24))
     self.surf.fill((53, 181, 87)) # Darker (34, 117, 56)
     # self.rect = self.surf.get_rect()
-    self.body =  [[16,12], [15,12], [14, 12]]
+    # self.body =  [[16,12], [15,12], [14, 12]]
+    self.body = [[int(constants.MAX_WIDTH/2), int(constants.MAX_HEIGHT/2)]]
     self.direction = [1,0]
     self.score = 0
 
@@ -129,12 +130,12 @@ class Snake:
     for i in range(1, len(self.body)):
       if(self.body[0] == self.body[i]):
         # print('me')
-        return [True, -1]
+        return [True, constants.REWARD_LOSS]
 
     # Check if hits walls
     if self.body[0][0] < 0 or self.body[0][0] >= constants.MAX_WIDTH or self.body[0][1] < 0 or self.body[0][1] >= constants.MAX_HEIGHT:
       # print('wall')
-      return [True, -1]
+      return [True, constants.REWARD_LOSS]
 
     # Check if food was eaten
     if(self.body[0] == food.position):
@@ -143,9 +144,9 @@ class Snake:
       food.eaten(self.body)
 
       self.score = self.score + 1
-      return [False, 1]
+      return [False, constants.REWARD_WIN]
 
-    return [False, -0.1]
+    return [False, constants.REWARD_NULL]
 
 class Food:
   def __init__(self):
