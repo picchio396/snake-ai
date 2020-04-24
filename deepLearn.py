@@ -18,7 +18,8 @@ import controller.snake_env as controller
 
 def run_experiment(argv):
     print(argv)
-    MAX_EPOCHS = 1000
+    MAX_EPOCHS = 150
+    
 
     env = controller.SnakeEnv()
 

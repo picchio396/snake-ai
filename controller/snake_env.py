@@ -103,58 +103,58 @@ class SnakeEnv():
 		# going rigth
 		if self.snake.direction == [1, 0]:
 			self.isSnakeRight =  True
-		# food left or right
-		if self.snake.body[0][1] - self.food.position[1] > 0:
-			self.isFoodLeft = True
-		elif self.snake.body[0][1] - self.food.position[1] < 0:
-			self.isFoodRight = True
-		#food up or down
-		if self.snake.body[0][0] - self.food.position[0] > 0:
-			self.isFoodDown = True
-		elif self.snake.body[0][0] - self.food.position[0] < 0:
-			self.isFoodUp = True
+			# food left or right
+			if self.snake.body[0][1] - self.food.position[1] > 0:
+				self.isFoodLeft = True
+			elif self.snake.body[0][1] - self.food.position[1] < 0:
+				self.isFoodRight = True
+			#food up or down
+			if self.snake.body[0][0] - self.food.position[0] > 0:
+				self.isFoodDown = True
+			elif self.snake.body[0][0] - self.food.position[0] < 0:
+				self.isFoodUp = True
 
 		# going left
 		if self.snake.direction == [-1, 0]:
 			self.isSnakeLeft = True
-		# food left or right
-		if self.snake.body[0][1] - self.food.position[1] < 0:
-			self.isFoodLeft = True
-		elif self.snake.body[0][1] - self.food.position[1] > 0:
-			self.isFoodRight = True
-		#food up or down
-		if self.snake.body[0][0] - self.food.position[0] < 0:
-			self.isFoodDown = True
-		elif self.snake.body[0][0] - self.food.position[0] > 0:
-			self.isFoodUp = True
+			# food left or right
+			if self.snake.body[0][1] - self.food.position[1] < 0:
+				self.isFoodLeft = True
+			elif self.snake.body[0][1] - self.food.position[1] > 0:
+				self.isFoodRight = True
+			#food up or down
+			if self.snake.body[0][0] - self.food.position[0] < 0:
+				self.isFoodDown = True
+			elif self.snake.body[0][0] - self.food.position[0] > 0:
+				self.isFoodUp = True
 
 		# going up
 		if self.snake.direction == [0,-1]:
 			self.isSnakeUp = True
-		# food left or right
-		if self.snake.body[0][0] - self.food.position[0] > 0:
-			self.isFoodLeft = True
-		elif self.snake.body[0][0] - self.food.position[0] < 0:
-			self.isFoodRight = True
-		#food up or down
-		if self.snake.body[0][1] - self.food.position[1] < 0:
-			self.isFoodDown = True
-		elif self.snake.body[0][1] - self.food.position[1] > 0:
-			self.isFoodUp = True
+			# food left or right
+			if self.snake.body[0][0] - self.food.position[0] > 0:
+				self.isFoodLeft = True
+			elif self.snake.body[0][0] - self.food.position[0] < 0:
+				self.isFoodRight = True
+			#food up or down
+			if self.snake.body[0][1] - self.food.position[1] < 0:
+				self.isFoodDown = True
+			elif self.snake.body[0][1] - self.food.position[1] > 0:
+				self.isFoodUp = True
 
 		# going down
 		if self.snake.direction == [0,1]:
 			self.isSnakeDown = True
-		# food left or right
-		if self.snake.body[0][0] - self.food.position[0] < 0:
-			self.isFoodLeft = True
-		elif self.snake.body[0][0] - self.food.position[0] > 0:
-			self.isFoodRight = True
-		#food up or down
-		if self.snake.body[0][1] - self.food.position[1] > 0:
-			self.isFoodDown = True
-		elif self.snake.body[0][1] - self.food.position[1] < 0:
-			self.isFoodUp = True
+			# food left or right
+			if self.snake.body[0][0] - self.food.position[0] < 0:
+				self.isFoodLeft = True
+			elif self.snake.body[0][0] - self.food.position[0] > 0:
+				self.isFoodRight = True
+			#food up or down
+			if self.snake.body[0][1] - self.food.position[1] > 0:
+				self.isFoodDown = True
+			elif self.snake.body[0][1] - self.food.position[1] < 0:
+				self.isFoodUp = True
 
 
 		self.isDangerFront = self.snake.danger('front')
