@@ -114,7 +114,7 @@ class Snake:
         next_block = [next_block[0] - 1, next_block[1]]
 
     # Check if collides with itself
-    for i in range(1, len(self.body)):
+    for i in range(0, len(self.body)):
       if(next_block == self.body[i]):
         return True
 
