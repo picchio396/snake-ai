@@ -30,6 +30,19 @@ class SnakeEnv():
 
 		self.state = self.reset()
 
+	'''
+	# must go off danger function in snake
+	# might have to decrease state (remove danger bins)
+
+	def look_ahead(self, action):
+		if (action == 0):
+			# compute reward
+		elif (action == 1):
+			# compute reward
+		elif (action == 2):
+			# compute reward
+	'''
+
 	def step(self, action):
 		for event in pygame.event.get():
 			if event.type == KEYDOWN:
