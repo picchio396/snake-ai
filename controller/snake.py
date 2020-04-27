@@ -66,19 +66,7 @@ class Snake:
 
     # Move head
     self.body[0] = [self.body[0][0] + self.direction[0], self.body[0][1] + self.direction[1]]
-    # self.x[0] = self.x[0] + (self.direction[0])
-    # self.y[0] = self.y[0] + (self.direction[1])
-
-    # Keep snake on the screen
-    # if self.body[0][0] < 0:
-    #   self.body[0][0] = int(constants.MAX_WIDTH - 1)
-    # if self.body[0][0] >= constants.MAX_WIDTH:
-    #   self.body[0][0] = 0
-    # if self.body[0][1] < 0:
-    #   self.body[0][1] = int(constants.MAX_HEIGHT - 1)
-    # if self.body[0][1] >= constants.MAX_HEIGHT:
-    #   self.body[0][1] = 0
-
+ 
   def danger (self, look):  
     next_block = self.body[0]
 

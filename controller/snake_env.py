@@ -14,19 +14,8 @@ class SnakeEnv():
 	def __init__(self):
 		# Initialize pygame
 		pygame.init()
-		self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH + 1, constants.SCREEN_HEIGHT + 1))
+		self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH + 61, constants.SCREEN_HEIGHT + 1))
 		self.clock = pygame.time.Clock() 
-
-		self.isSnakeRight = False
-		self.isSnakeLeft = False
-		self.isSnakeUp = False
-		self.isSnakeDown = False
-
-		self.isSnakeRight = False
-		self.isSnakeLeft = False
-		self.isSnakeUp = False
-		self.isSnakeDown = False
-		self.isDanger = False
 
 		self.state = self.reset()
 
@@ -93,94 +82,119 @@ class SnakeEnv():
 	def close(self):
 		self.done = True
 
+	def display_ui(self, score, record):
+		myfont = pygame.font.SysFont('Segoe UI', 20)
+		myfont_bold = pygame.font.SysFont('Segoe UI', 20, True)
+		text_score = myfont.render('SCORE: ', True, (0, 0, 0))
+		text_score_number = myfont.render(str(score), True, (0, 0, 0))
+		text_highest = myfont.render('HIGHEST SCORE: ', True, (0, 0, 0))
+		text_highest_number = myfont_bold.render(str(record), True, (0, 0, 0))
+
+		self.screen.blit(text_score, (45, 440))
+		self.screen.blit(text_score_number, (120, 440))
+		self.screen.blit(text_highest, (190, 440))
+		self.screen.blit(text_highest_number, (350, 440))
+
 	# State is given by relative fruit position and relative tail position
 	def getState(self):
 		# Reset
-		self.isSnakeRight = False
-		self.isSnakeLeft = False
-		self.isSnakeUp = False
-		self.isSnakeDown = False
+		isSnakeRight = False
+		isSnakeLeft = False
+		isSnakeUp = False
+		isSnakeDown = False
 
-		self.isFoodRight = False
-		self.isFoodLeft = False
-		self.isFoodUp = False
-		self.isFoodDown = False
+		isFoodRight = False
+		isFoodLeft = False
+		isFoodUp = False
+		isFoodDown = False
 
-		self.isDangerFront = False
-		self.isDangerLeft = False
-		self.isDangerRight = False
+		isDangerFront = False
+		isDangerLeft = False
+		isDangerRight = False
 
 		# rel_food = [self.snake.body[0][0] - self.food.position[0], self.snake.body[0][1] - self.food.position[1]]
 		# rel_tail = [self.snake.body[0][0] - self.snake.body[-1][0], self.snake.body[0][1] - self.snake.body[-1][1]]
 
 		# going rigth
 		if self.snake.direction == [1, 0]:
-			self.isSnakeRight =  True
+			isSnakeRight =  True
 			# food left or right
 			if self.snake.body[0][1] - self.food.position[1] > 0:
-				self.isFoodLeft = True
+				isFoodLeft = True
 			elif self.snake.body[0][1] - self.food.position[1] < 0:
-				self.isFoodRight = True
+				isFoodRight = True
 			#food up or down
 			if self.snake.body[0][0] - self.food.position[0] > 0:
-				self.isFoodDown = True
+				isFoodDown = True
 			elif self.snake.body[0][0] - self.food.position[0] < 0:
-				self.isFoodUp = True
+				isFoodUp = True
 
 		# going left
 		if self.snake.direction == [-1, 0]:
-			self.isSnakeLeft = True
+			isSnakeLeft = True
 			# food left or right
 			if self.snake.body[0][1] - self.food.position[1] < 0:
-				self.isFoodLeft = True
+				isFoodLeft = True
 			elif self.snake.body[0][1] - self.food.position[1] > 0:
-				self.isFoodRight = True
+				isFoodRight = True
 			#food up or down
 			if self.snake.body[0][0] - self.food.position[0] < 0:
-				self.isFoodDown = True
+				isFoodDown = True
 			elif self.snake.body[0][0] - self.food.position[0] > 0:
-				self.isFoodUp = True
+				isFoodUp = True
 
 		# going up
 		if self.snake.direction == [0,-1]:
-			self.isSnakeUp = True
+			isSnakeUp = True
 			# food left or right
 			if self.snake.body[0][0] - self.food.position[0] > 0:
-				self.isFoodLeft = True
+				isFoodLeft = True
 			elif self.snake.body[0][0] - self.food.position[0] < 0:
-				self.isFoodRight = True
+				isFoodRight = True
 			#food up or down
 			if self.snake.body[0][1] - self.food.position[1] < 0:
-				self.isFoodDown = True
+				isFoodDown = True
 			elif self.snake.body[0][1] - self.food.position[1] > 0:
-				self.isFoodUp = True
+				isFoodUp = True
 
 		# going down
 		if self.snake.direction == [0,1]:
-			self.isSnakeDown = True
+			isSnakeDown = True
 			# food left or right
 			if self.snake.body[0][0] - self.food.position[0] < 0:
-				self.isFoodLeft = True
+				isFoodLeft = True
 			elif self.snake.body[0][0] - self.food.position[0] > 0:
-				self.isFoodRight = True
+				isFoodRight = True
 			#food up or down
 			if self.snake.body[0][1] - self.food.position[1] > 0:
-				self.isFoodDown = True
+				isFoodDown = True
 			elif self.snake.body[0][1] - self.food.position[1] < 0:
-				self.isFoodUp = True
+				isFoodUp = True
 
 
-		self.isDangerFront = self.snake.danger('front')
-		self.isDangerLeft = self.snake.danger('left')
-		self.isDangerRight = self.snake.danger('right')
+		isDangerFront = self.snake.danger('front')
+		isDangerLeft = self.snake.danger('left')
+		isDangerRight = self.snake.danger('right')
 
-		# self.printState()
+		# self.printState([
+		# 	isSnakeRight,
+		# 	isSnakeLeft,
+		# 	isSnakeUp,
+		# 	isSnakeDown,
+		# 	isFoodRight,
+		# 	isFoodLeft,
+		# 	isFoodUp,
+		# 	isFoodDown,
+		# 	isDangerFront,
+		# 	isDangerLeft,
+		# 	isDangerRight
+		# ])
 
-		bin_string = str(int(self.isSnakeRight == True)) + str(int(self.isSnakeLeft == True)) + str(int(self.isSnakeUp == True)) + str(int(self.isSnakeDown == True)) + str(int(self.isFoodRight == True)) + str(int(self.isFoodLeft == True)) + str(int(self.isFoodUp == True)) + str(int(self.isFoodDown == True)) + str(int(self.isDangerFront == True)) + str(int(self.isDangerLeft == True)) + str(int(self.isDangerRight == True))
+		bin_string = str(int(isSnakeRight == True)) + str(int(isSnakeLeft == True)) + str(int(isSnakeUp == True)) + str(int(isSnakeDown == True)) + str(int(isFoodRight == True)) + str(int(isFoodLeft == True)) + str(int(isFoodUp == True)) + str(int(isFoodDown == True)) + str(int(isDangerFront == True)) + str(int(isDangerLeft == True)) + str(int(isDangerRight == True))
 
 		return int(bin_string, 2) 
 
-	def printState(self):
+	def printState(self, state):
 		print("\
 		isSnakeRight: {0}\n\
 		isSnakeLeft: {1}\n\
@@ -193,6 +207,6 @@ class SnakeEnv():
 		isDangerFront: {8}\n\
 		isDangerLeft:{9}\n\
 		isDangerRight: {10}\n\n\
-		".format(self.isSnakeRight, self.isSnakeLeft, self.isSnakeUp, self.isSnakeDown, self.isFoodRight, self.isFoodLeft, self.isFoodUp, self.isFoodDown, self.isDangerFront, self.isDangerLeft, self.isDangerRight),
+		".format(state[0], state[1], state[2], state[3], state[4], state[5], state[6], state[7], state[8], state[9], state[10]),
 		end="\r"
 		)

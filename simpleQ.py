@@ -29,10 +29,10 @@ def run_experiment(argv):
     # epsilon: exploration faction (exploration (choosing alpha random action) vs exploitation (choosing actions based on already learned Q-values))
     alpha = 0.1 #0.1
     gamma = 0.6#0.6
-    epsilon =  1 #0.1
+    epsilon =  0 #0.1
 
-    epsilon_rate = 0.99
-    min_epsilon = 0.2
+    # epsilon_rate = 0.99
+    # min_epsilon = 0.2
 
     # gamma_rate = 0.99
     # min_gamma = 0.3
