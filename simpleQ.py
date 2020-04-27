@@ -18,9 +18,9 @@ import controller.snake_env as controller
 
 def run_experiment(argv):
     print(argv)
-    MAX_EPOCHS = 150
+    MAX_EPOCHS = 1
     
-
+    # env = controller.SnakeEnv(hasView=True, speed=constants.SPEED)
     env = controller.SnakeEnv()
 
     # All 0 < x < 1 
@@ -75,7 +75,7 @@ def run_experiment(argv):
             epochs += 1
 
         # # Updating values
-        epsilon = epsilon * epsilon_rate if epsilon > min_epsilon else min_epsilon
+        # epsilon = epsilon * epsilon_rate if epsilon > min_epsilon else min_epsilon
 
         if score > max_score:
             max_score = score
