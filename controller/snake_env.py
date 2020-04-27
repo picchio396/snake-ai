@@ -13,7 +13,7 @@ class SnakeEnv():
 
 	def __init__(self, hasView=True, speed=constants.SPEED ):
 		# Initialize pygame
-		pygame.init()
+		pygame.font.init()
 		self.hasView = hasView
 		self.speed = speed
 
@@ -185,23 +185,23 @@ class SnakeEnv():
 		isDangerLeft = self.snake.danger('left')
 		isDangerRight = self.snake.danger('right')
 
-		# self.printState([
-		# 	isSnakeRight,
-		# 	isSnakeLeft,
-		# 	isSnakeUp,
-		# 	isSnakeDown,
-		# 	isFoodRight,
-		# 	isFoodLeft,
-		# 	isFoodUp,
-		# 	isFoodDown,
-		# 	isDangerFront,
-		# 	isDangerLeft,
-		# 	isDangerRight
-		# ])
+		state = [
+			int(isSnakeRight == True),
+			int(isSnakeLeft == True),
+			int(isSnakeUp == True),
+			int(isSnakeDown == True),
+			int(isFoodRight == True),
+			int(isFoodLeft == True),
+			int(isFoodUp == True),
+			int(isFoodDown == True),
+			int(isDangerFront == True),
+			int(isDangerLeft == True),
+			int(isDangerRight == True)
+		]
 
-		bin_string = str(int(isSnakeRight == True)) + str(int(isSnakeLeft == True)) + str(int(isSnakeUp == True)) + str(int(isSnakeDown == True)) + str(int(isFoodRight == True)) + str(int(isFoodLeft == True)) + str(int(isFoodUp == True)) + str(int(isFoodDown == True)) + str(int(isDangerFront == True)) + str(int(isDangerLeft == True)) + str(int(isDangerRight == True))
+		# bin_string = str(int(isSnakeRight == True)) + str(int(isSnakeLeft == True)) + str(int(isSnakeUp == True)) + str(int(isSnakeDown == True)) + str(int(isFoodRight == True)) + str(int(isFoodLeft == True)) + str(int(isFoodUp == True)) + str(int(isFoodDown == True)) + str(int(isDangerFront == True)) + str(int(isDangerLeft == True)) + str(int(isDangerRight == True))
 
-		return int(bin_string, 2) 
+		return np.asarray(state)
 
 	def printState(self, state):
 		print("\

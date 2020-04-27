@@ -9,6 +9,8 @@
     Set the next state as the current state.
     If goal state is reached, then end and repeat the process.
 '''
+
+""" NOT USED GOOD FOR REFERENCE
 import sys
 import random
 import numpy as np
@@ -92,3 +94,4 @@ def run_experiment(argv):
 
 if __name__ == "__main__":
     run_experiment(sys.argv[1:])
+"""
