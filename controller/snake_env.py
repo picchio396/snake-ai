@@ -18,8 +18,7 @@ class SnakeEnv():
 		self.speed = speed
 
 		if self.hasView:
-			self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH + 100, constants.SCREEN_HEIGHT + 1))
-			self.clock = pygame.time.Clock() 
+			self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH + 1, constants.SCREEN_HEIGHT + 1))
 		self.state = self.reset()
 
 	def reset(self):
@@ -56,26 +55,13 @@ class SnakeEnv():
 		self.screen.blit(text_highest, (constants.SCREEN_WIDTH + 21, 50))
 		self.screen.blit(text_highest_number, (constants.SCREEN_WIDTH + 21, 440))
 
-	'''
-	# must go off danger function in snake
-	# might have to decrease state (remove danger bins)
-
-	def look_ahead(self, action):
-		if (action == 0):
-			# compute reward
-		elif (action == 1):
-			# compute reward
-		elif (action == 2):
-			# compute reward
-	'''
-
 	def step(self, action):
-		for event in pygame.event.get():
-			if event.type == KEYDOWN:
-				if event.key == K_ESCAPE:
-					self.done = True
-				elif event.type == QUIT:
-					self.done = True
+		# for event in pygame.event.get():
+		# 	if event.type == KEYDOWN:
+		# 		if event.key == K_ESCAPE:
+		# 			self.done = True
+		# 		elif event.type == QUIT:
+		# 			self.done = True
 		
 		if(action == 0):
 			self.snake.moveUp()
@@ -96,11 +82,8 @@ class SnakeEnv():
 		lost, reward = self.snake.collision(self.food)
 
 		if (lost):
-			# print("gg")
-			# print("Score: " + str(self.snake.score))
 			self.done = True
-
-		# self.clock.tick(constants.CLOCK)
+			
 		return [ state , reward, self.done, self.snake.score ]
 
 
