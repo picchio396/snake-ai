@@ -11,13 +11,50 @@ import constants
 
 class SnakeEnv():
 
-	def __init__(self):
+	def __init__(self, hasView=True, speed=constants.SPEED ):
 		# Initialize pygame
-		pygame.init()
-		self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH + 61, constants.SCREEN_HEIGHT + 1))
-		self.clock = pygame.time.Clock() 
+		pygame.font.init()
+		self.hasView = hasView
+		self.speed = speed
 
+		if self.hasView:
+			self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH + 100, constants.SCREEN_HEIGHT + 1))
+			self.clock = pygame.time.Clock() 
 		self.state = self.reset()
+
+	def reset(self):
+		self.done = False
+		self.reward = constants.REWARD_NULL
+		self.snake = Snake()
+		self.food = Food()
+		state = self.getState()
+
+		return state
+
+	def render(self):
+		self.screen.fill((0,0,0))
+		self.snake.draw(self.screen)
+		self.food.draw(self.screen)
+		# self.display_ui(self.snake.score, 0)
+		pygame.display.flip()
+
+		pygame.time.wait(self.speed)
+
+	def close(self):
+		self.done = True
+
+	def display_ui(self, score, record):
+		myfont = pygame.font.SysFont('Segoe UI', 20)
+		myfont_bold = pygame.font.SysFont('Segoe UI', 20, True)
+		text_score = myfont.render('SCORE: ', True, (0, 0, 0))
+		text_score_number = myfont.render(str(score), True, (0, 0, 0))
+		text_highest = myfont.render('HIGHEST SCORE: ', True, (0, 0, 0))
+		text_highest_number = myfont_bold.render(str(record), True, (0, 0, 0))
+
+		self.screen.blit(text_score, (constants.SCREEN_WIDTH + 21, 20))
+		self.screen.blit(text_score_number, (constants.SCREEN_WIDTH + 21, 20))
+		self.screen.blit(text_highest, (constants.SCREEN_WIDTH + 21, 50))
+		self.screen.blit(text_highest_number, (constants.SCREEN_WIDTH + 21, 440))
 
 	'''
 	# must go off danger function in snake
@@ -49,7 +86,9 @@ class SnakeEnv():
 		if(action == 3):
 			self.snake.moveLeft()
 
-		self.render()
+		if self.hasView:
+			self.render()
+
 		self.snake.update()
 		# input('\n')
 		state = self.getState()
@@ -61,39 +100,9 @@ class SnakeEnv():
 			# print("Score: " + str(self.snake.score))
 			self.done = True
 
-		self.clock.tick(constants.CLOCK)
+		# self.clock.tick(constants.CLOCK)
 		return [ state , reward, self.done, self.snake.score ]
 
-	def reset(self):
-		self.done = False
-		self.reward = constants.REWARD_NULL
-		self.snake = Snake()
-		self.food = Food()
-		state = self.getState()
-
-		return state
-
-	def render(self):
-		self.screen.fill((0,0,0))
-		self.snake.draw(self.screen)
-		self.food.draw(self.screen)
-		pygame.display.flip()
-
-	def close(self):
-		self.done = True
-
-	def display_ui(self, score, record):
-		myfont = pygame.font.SysFont('Segoe UI', 20)
-		myfont_bold = pygame.font.SysFont('Segoe UI', 20, True)
-		text_score = myfont.render('SCORE: ', True, (0, 0, 0))
-		text_score_number = myfont.render(str(score), True, (0, 0, 0))
-		text_highest = myfont.render('HIGHEST SCORE: ', True, (0, 0, 0))
-		text_highest_number = myfont_bold.render(str(record), True, (0, 0, 0))
-
-		self.screen.blit(text_score, (45, 440))
-		self.screen.blit(text_score_number, (120, 440))
-		self.screen.blit(text_highest, (190, 440))
-		self.screen.blit(text_highest_number, (350, 440))
 
 	# State is given by relative fruit position and relative tail position
 	def getState(self):
@@ -176,23 +185,23 @@ class SnakeEnv():
 		isDangerLeft = self.snake.danger('left')
 		isDangerRight = self.snake.danger('right')
 
-		# self.printState([
-		# 	isSnakeRight,
-		# 	isSnakeLeft,
-		# 	isSnakeUp,
-		# 	isSnakeDown,
-		# 	isFoodRight,
-		# 	isFoodLeft,
-		# 	isFoodUp,
-		# 	isFoodDown,
-		# 	isDangerFront,
-		# 	isDangerLeft,
-		# 	isDangerRight
-		# ])
+		state = [
+			int(isSnakeRight == True),
+			int(isSnakeLeft == True),
+			int(isSnakeUp == True),
+			int(isSnakeDown == True),
+			int(isFoodRight == True),
+			int(isFoodLeft == True),
+			int(isFoodUp == True),
+			int(isFoodDown == True),
+			int(isDangerFront == True),
+			int(isDangerLeft == True),
+			int(isDangerRight == True)
+		]
 
-		bin_string = str(int(isSnakeRight == True)) + str(int(isSnakeLeft == True)) + str(int(isSnakeUp == True)) + str(int(isSnakeDown == True)) + str(int(isFoodRight == True)) + str(int(isFoodLeft == True)) + str(int(isFoodUp == True)) + str(int(isFoodDown == True)) + str(int(isDangerFront == True)) + str(int(isDangerLeft == True)) + str(int(isDangerRight == True))
+		# bin_string = str(int(isSnakeRight == True)) + str(int(isSnakeLeft == True)) + str(int(isSnakeUp == True)) + str(int(isSnakeDown == True)) + str(int(isFoodRight == True)) + str(int(isFoodLeft == True)) + str(int(isFoodUp == True)) + str(int(isFoodDown == True)) + str(int(isDangerFront == True)) + str(int(isDangerLeft == True)) + str(int(isDangerRight == True))
 
-		return int(bin_string, 2) 
+		return np.asarray(state)
 
 	def printState(self, state):
 		print("\

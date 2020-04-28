@@ -9,6 +9,8 @@
     Set the next state as the current state.
     If goal state is reached, then end and repeat the process.
 '''
+
+""" NOT USED GOOD FOR REFERENCE
 import sys
 import random
 import numpy as np
@@ -18,9 +20,9 @@ import controller.snake_env as controller
 
 def run_experiment(argv):
     print(argv)
-    MAX_EPOCHS = 150
+    MAX_EPOCHS = 1
     
-
+    # env = controller.SnakeEnv(hasView=True, speed=constants.SPEED)
     env = controller.SnakeEnv()
 
     # All 0 < x < 1 
@@ -75,7 +77,7 @@ def run_experiment(argv):
             epochs += 1
 
         # # Updating values
-        epsilon = epsilon * epsilon_rate if epsilon > min_epsilon else min_epsilon
+        # epsilon = epsilon * epsilon_rate if epsilon > min_epsilon else min_epsilon
 
         if score > max_score:
             max_score = score
@@ -92,3 +94,4 @@ def run_experiment(argv):
 
 if __name__ == "__main__":
     run_experiment(sys.argv[1:])
+"""
