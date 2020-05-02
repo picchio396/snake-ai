@@ -4,7 +4,8 @@ A project to start working with ML algorithms. This is a program using a deep re
 
 ## How to run
 
-Argparser is pretty cool
+There are two different methods, one is `simpleQ.py` the other is `deepQ.py`</br>
+Argparser is pretty cool.
 ```
 usage: simpleQ.py | deepQ.py [-h] [--display bool] [--wait int]
 
