@@ -1,9 +1,12 @@
+# Reference https://github.com/maurock/snake-ga
+
 import sys
 from random import randint, uniform
 import numpy as np
-import constants
+import argparse
+
 import controller.snake_env as controller
-from DeepAgent import DeepAgent
+from ml_agent.DeepAgent import DeepAgent
 
 import os
 import matplotlib.pyplot as plt
@@ -11,19 +14,19 @@ import seaborn as sns
 
 def define_parameters():
     params = dict()
-    params['display_option'] = False
-    params['speed'] = 0
+    params['display_option'] = True
+    params['speed'] = 60
     params['epsilon_decay_linear'] = 1/75
     params['learning_rate'] = 0.0005
     params['first_layer_size'] = 12 #150   # neurons in the first layer
     params['second_layer_size'] = 8 #150   # neurons in the second layer
     params['third_layer_size'] = 0 #150    # neurons in the third layer
-    params['episodes'] = 150          
+    params['episodes'] = 1          
     params['memory_size'] = 2500
     params['batch_size'] = 500
-    params['weights_path'] = 'weights/weights.hdf5'
+    params['weights_path'] = 'ml_agent/weights/weights.hdf5'
     params['load_weights'] = False
-    params['train'] = True
+    params['train'] = False
     return params
 
 def plot_seaborn(x_array, y_array):
@@ -40,7 +43,7 @@ def plot_seaborn(x_array, y_array):
 
 def run_experiment(params):
     # Start environment
-    env = controller.SnakeEnv(params['display_option'], params['speed'])
+    env = controller.SnakeEnv('deep', params['display_option'], params['speed'])
     agent = DeepAgent(params)
 
     episode_num = 0
@@ -96,7 +99,20 @@ def run_experiment(params):
     print("Training finished.\n")
     plot_seaborn(episode_plot, score_plot)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Run simple Q learning algorithm')
+    parser.add_argument('--display',
+                        metavar='bool',  
+                        type=bool, 
+                        default=False,
+                        help='If you want a ui or not',
+                        )
+    parser.add_argument('--wait', 
+                        metavar='int',
+                        type=int, 
+                        default=50,
+                        help='how long to wait till next action (bigger the number slower the speed)')
+    args = parser.parse_args()
     params = define_parameters()
-    # params['bayesian_optimization'] = False    # Use bayesOpt.py for Bayesian Optimization
-    run_experiment(params)
+
+    run_experiment(args.display, args.wait, params)

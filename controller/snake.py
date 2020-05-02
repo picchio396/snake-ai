@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import pygame
 from random import randint
-import constants
+import controller.constants as constants
 
 class Snake:
   def __init__(self):

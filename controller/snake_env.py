@@ -7,23 +7,25 @@ QUIT
 )
 
 from controller.snake import Snake, Food
-import constants
+import controller.constants as constants
 
 class SnakeEnv():
 
-	def __init__(self, hasView=True, speed=constants.SPEED ):
-		# Initialize pygame
-		pygame.font.init()
+	def __init__(self, model, hasView=True, speed=constants.SPEED ):
+		self.model = model
 		self.hasView = hasView
 		self.speed = speed
 
 		if self.hasView:
+			# Initialize pygame
+			pygame.init()
 			self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH + 1, constants.SCREEN_HEIGHT + 1))
 		self.state = self.reset()
 
 	def reset(self):
 		self.done = False
 		self.reward = constants.REWARD_NULL
+
 		self.snake = Snake()
 		self.food = Food()
 		state = self.getState()
@@ -163,29 +165,34 @@ class SnakeEnv():
 			elif self.snake.body[0][1] - self.food.position[1] < 0:
 				isFoodUp = True
 
-
 		isDangerFront = self.snake.danger('front')
 		isDangerLeft = self.snake.danger('left')
 		isDangerRight = self.snake.danger('right')
 
-		state = [
-			int(isSnakeRight == True),
-			int(isSnakeLeft == True),
-			int(isSnakeUp == True),
-			int(isSnakeDown == True),
-			int(isFoodRight == True),
-			int(isFoodLeft == True),
-			int(isFoodUp == True),
-			int(isFoodDown == True),
-			int(isDangerFront == True),
-			int(isDangerLeft == True),
-			int(isDangerRight == True)
-		]
+		if self.model == 'simple':
+			bin_string = str(int(isSnakeRight == True)) + str(int(isSnakeLeft == True)) + str(int(isSnakeUp == True)) + str(int(isSnakeDown == True)) + str(int(isFoodRight == True)) + str(int(isFoodLeft == True)) + str(int(isFoodUp == True)) + str(int(isFoodDown == True)) + str(int(isDangerFront == True)) + str(int(isDangerLeft == True)) + str(int(isDangerRight == True))
+			return int(bin_string, 2)
 
-		# bin_string = str(int(isSnakeRight == True)) + str(int(isSnakeLeft == True)) + str(int(isSnakeUp == True)) + str(int(isSnakeDown == True)) + str(int(isFoodRight == True)) + str(int(isFoodLeft == True)) + str(int(isFoodUp == True)) + str(int(isFoodDown == True)) + str(int(isDangerFront == True)) + str(int(isDangerLeft == True)) + str(int(isDangerRight == True))
-
-		return np.asarray(state)
-
+		elif self.model == 'deep':
+			state = [
+				int(isSnakeRight == True),
+				int(isSnakeLeft == True),
+				int(isSnakeUp == True),
+				int(isSnakeDown == True),
+				int(isFoodRight == True),
+				int(isFoodLeft == True),
+				int(isFoodUp == True),
+				int(isFoodDown == True),
+				int(isDangerFront == True),
+				int(isDangerLeft == True),
+				int(isDangerRight == True)
+			]
+			return np.asarray(state)
+		
+		else:
+			print('Model not defined, returning nothing')
+			return
+	
 	def printState(self, state):
 		print("\
 		isSnakeRight: {0}\n\

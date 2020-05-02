@@ -10,20 +10,19 @@
     If goal state is reached, then end and repeat the process.
 '''
 
-""" NOT USED GOOD FOR REFERENCE
+# """ NOT USED GOOD FOR REFERENCE
 import sys
 import random
 import numpy as np
-import constants
 import controller.snake_env as controller
+import argparse
 
 
-def run_experiment(argv):
-    print(argv)
-    MAX_EPOCHS = 1
-    
-    # env = controller.SnakeEnv(hasView=True, speed=constants.SPEED)
-    env = controller.SnakeEnv()
+def run_experiment(display, wait):
+    print(display, wait)
+    MAX_EPOCHS = 150
+
+    env = controller.SnakeEnv('simple', hasView=display, speed=wait)
 
     # All 0 < x < 1 
     # alpha: learning rate (the extent to which our Q-values are being updated in every iteration)
@@ -31,7 +30,7 @@ def run_experiment(argv):
     # epsilon: exploration faction (exploration (choosing alpha random action) vs exploitation (choosing actions based on already learned Q-values))
     alpha = 0.1 #0.1
     gamma = 0.6#0.6
-    epsilon =  0 #0.1
+    epsilon =  0.3 #0.1
 
     # epsilon_rate = 0.99
     # min_epsilon = 0.2
@@ -93,5 +92,18 @@ def run_experiment(argv):
     return int(max_score)
 
 if __name__ == "__main__":
-    run_experiment(sys.argv[1:])
-"""
+    parser = argparse.ArgumentParser(description='Run simple Q learning algorithm')
+    parser.add_argument('--display',
+                        metavar='bool',  
+                        type=bool, 
+                        default=False,
+                        help='If you want a ui or not',
+                        )
+    parser.add_argument('--wait', 
+                        metavar='int',
+                        type=int, 
+                        default=50,
+                        help='how long to wait till next action (bigger the number slower the speed)')
+    args = parser.parse_args()
+
+    run_experiment(args.display, args.wait)
