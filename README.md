@@ -18,7 +18,7 @@ optional arguments:
 ```
 
 ## Notes
-### General loop (`simple.py`)
+### General loop (simple.py)
 
 1. Initialize the Q-table by all zeros.
 2. Start exploring actions: For each state, select any one among all possible actions for the current state (S).
